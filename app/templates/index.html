@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detecção de Fraude</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Verificador de Transação</h1>
+        <form method="POST" action="{{ url_for('predict') }}">
+            <label>Qual a distância da sua casa até o local da compra? (km)</label>
+            <input type="number" step="0.01" name="distance_from_home" required>
+
+            <label>Qual a distância entre essa e a última transação? (dias)</label>
+            <input type="number" step="0" name="distance_from_last_transaction" required>
+
+            <label>Qual o valor da compra em relação à média?</label>
+            <input type="number" step="0.01" name="ratio_to_median_purchase_price" required>
+
+            <label>Você já comprou neste estabelecimento antes?</label>
+            <select name="repeat_retailer" required>
+                <option value="1">Sim</option>
+                <option value="0">Não</option>
+            </select>
+
+            <label>O cartão foi inserido no chip?</label>
+            <select name="used_chip" required>
+                <option value="1">Sim</option>
+                <option value="0">Não</option>
+            </select>
+
+            <label>O PIN foi digitado?</label>
+            <select name="used_pin_number" required>
+                <option value="1">Sim</option>
+                <option value="0">Não</option>
+            </select>
+
+            <label>Foi uma compra online?</label>
+            <select name="online_order" required>
+                <option value="1">Sim</option>
+                <option value="0">Não</option>
+            </select>
+
+            <button type="submit">Verificar Transação</button>
+        </form>
+    </div>
+</body>
+</html>

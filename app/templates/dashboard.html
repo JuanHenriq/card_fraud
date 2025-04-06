@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard de Transações</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard de Verificação de Fraudes</h1>
+    
+        <div class="chart-grid">
+            <div class="chart-section">
+                <h2>Distribuição de Fraude nas Transações</h2>
+                <div id="fraud-pie-chart"></div>
+            </div>
+    
+            <div class="chart-section">
+                <h2>Análise de Distância x Fraude</h2>
+                <div id="distance-scatter"></div>
+            </div>
+    
+            <div class="chart-section">
+                <h2>Comprou antes neste estabelecimento?</h2>
+                <div id="repeat-pie-chart"></div>
+            </div>
+    
+            <div class="chart-section">
+                <h2>Cartão inserido no chip?</h2>
+                <div id="chip-pie-chart"></div>
+            </div>
+    
+            <div class="chart-section">
+                <h2>PIN foi digitado?</h2>
+                <div id="pin-pie-chart"></div>
+            </div>
+    
+            <div class="chart-section">
+                <h2>Compra foi online?</h2>
+                <div id="online-pie-chart"></div>
+            </div>
+        </div>
+    
+        <div class="table-section">
+            <h2>Estatísticas Descritivas</h2>
+            {{ stats | safe }}
+        </div>
+    
+        <div class="table-section">
+            <h2>Dados das Transações</h2>
+            {{ df | safe }}
+        </div>
+    </div>    
+
+    <script>
+        const fraudCounts = JSON.parse('{{ fraud_counts | tojson | safe }}');
+        const distances = JSON.parse('{{ distances | tojson | safe }}');
+        const labels = JSON.parse('{{ labels | tojson | safe }}');
+        const repeatCounts = JSON.parse('{{ repeat_counts | tojson | safe }}');
+        const chipCounts = JSON.parse('{{ chip_counts | tojson | safe }}');
+        const pinCounts = JSON.parse('{{ pin_counts | tojson | safe }}');
+        const onlineCounts = JSON.parse('{{ online_counts | tojson | safe }}');
+
+        // Gráfico de Pizza - Fraudes
+        Plotly.newPlot('fraud-pie-chart', [{
+            values: fraudCounts,
+            labels: fraudCounts.map((_, i) => `Classe ${i}`),
+            type: 'pie',
+            marker: {
+                colors: ['#007acc', '#cc3300', '#ff9900']
+            }
+        }], { height: 400, width: 400 });
+
+        // Gráfico de Dispersão
+        Plotly.newPlot('distance-scatter', [{
+            x: distances,
+            y: labels,
+            mode: 'markers',
+            type: 'scatter',
+            marker: {
+                color: labels,
+                colorscale: [[0, '#007acc'], [1, '#cc3300']],
+                size: 10
+            }
+        }], {
+            xaxis: { title: 'Distância da Casa (km)' },
+            yaxis: { title: 'Classe da Predição' },
+            height: 400
+        });
+
+        // Função genérica para criar gráfico de pizza
+        function gerarPizza(id, valores, titulo, labels = ['Não', 'Sim']) {
+            Plotly.newPlot(id, [{
+                values: valores,
+                labels: labels,
+                type: 'pie',
+                marker: { colors: ['#ffcc00', '#009966'] }
+            }], { title: titulo, height: 300, width: 300 });
+        }
+
+        gerarPizza('repeat-pie-chart', repeatCounts, 'Comprou antes?');
+        gerarPizza('chip-pie-chart', chipCounts, 'Cartão com Chip?');
+        gerarPizza('pin-pie-chart', pinCounts, 'PIN foi usado?');
+        gerarPizza('online-pie-chart', onlineCounts, 'Compra Online?');
+    </script>
+</body>
+</html>

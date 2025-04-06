@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 2em;
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+h1 {
+    font-size: 2em;
+    color: #007acc;
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+
+h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 1em;
+    text-align: center;
+}
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(35em, 1fr));
+    gap: 4em;
+}
+
+/* Cada seção de gráfico */
+.chart-section {
+    padding: 1.5em;
+    border: 1px solid #ddd;
+    border-radius: 1em;
+    box-shadow: 0 0.2em 0.6em rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+}
+
+/* Tabelas em seções separadas */
+.table-section {
+    background-color: #ffffff;
+    padding: 1.5em;
+    border: 1px solid #ddd;
+    border-radius: 1em;
+    box-shadow: 0 0.2em 0.6em rgba(0, 0, 0, 0.05);
+    overflow-x: auto;
+}
+
+.table-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+    font-size: 0.95em;
+    table-layout: auto;
+}
+
+.table-section th, .table-section td {
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    text-align: center;
+}
+
+.table-section th {
+    background-color: #007acc;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .chart-grid {
+        grid-template-columns: 1fr;
+    }
+}
